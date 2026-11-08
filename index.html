@@ -1,1 +1,731 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walletora - Digital Wallet</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #dff6ff, #a5dcff);
+    min-height: 100vh;
+    color: #222;
+}
+
+header {
+    background: #087fbd;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+header p {
+    margin-top: 5px;
+}
+
+.container {
+    width: 92%;
+    max-width: 500px;
+    margin: 25px auto;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 12px #00000015;
+}
+
+h2, h3 {
+    color: #087fbd;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+button {
+    border: none;
+    padding: 12px 16px;
+    background: #087fbd;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 5px 2px;
+}
+
+button:hover {
+    background: #056394;
+}
+
+.secondary {
+    background: #16a085;
+}
+
+.danger {
+    background: #e74c3c;
+}
+
+.balance {
+    background: linear-gradient(135deg, #087fbd, #35b5e8);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.balance h2 {
+    color: white;
+}
+
+.balance h1 {
+    font-size: 32px;
+    margin-top: 10px;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.actions button {
+    padding: 16px 5px;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.transaction {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 14px;
+}
+
+small {
+    color: #777;
+}
+
+#message {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #087fbd;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💰 Walletora</h1>
+    <p>Digital Wallet Simulation</p>
+</header>
+
+<div class="container">
+
+<!-- LOGIN SECTION -->
+
+<div class="card" id="loginSection">
+
+    <h2>Welcome to Walletora</h2>
+    <p>Login to your digital wallet</p>
+
+    <input type="text" id="loginEmail"
+    placeholder="Enter Email">
+
+    <input type="password" id="loginPassword"
+    placeholder="Enter Password">
+
+    <button onclick="login()">Login</button>
+
+    <button class="secondary"
+    onclick="showRegister()">Create Account</button>
+
+    <p id="loginMessage"></p>
+
+</div>
+
+<!-- REGISTER SECTION -->
+
+<div class="card hidden" id="registerSection">
+
+    <h2>Create Account</h2>
+
+    <input type="text" id="regName"
+    placeholder="Full Name">
+
+    <input type="email" id="regEmail"
+    placeholder="Email Address">
+
+    <input type="password" id="regPassword"
+    placeholder="Create Password">
+
+    <button onclick="register()">Register</button>
+
+    <button class="secondary"
+    onclick="showLogin()">Back to Login</button>
+
+    <p id="registerMessage"></p>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="hidden">
+
+    <div class="card">
+        <h2>Hello, <span id="userName"></span> 👋</h2>
+        <p>Welcome to your Walletora account.</p>
+    </div>
+
+    <!-- BALANCE -->
+
+    <div class="balance">
+        <h2>Available Balance</h2>
+        <h1 id="balance">₹5,000.00</h1>
+        <p>Demo Wallet Balance</p>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="card">
+
+        <h3>Wallet Services</h3>
+
+        <div class="actions">
+
+            <button onclick="showAddMoney()">
+                ➕ Add Money
+            </button>
+
+            <button onclick="showSendMoney()">
+                💸 Send Money
+            </button>
+
+            <button onclick="showRecharge()">
+                📱 Mobile Recharge
+            </button>
+
+            <button type="button">
+                🔲 QR
+            </button>
+
+            <button onclick="showHistory()">
+                📜 History
+            </button>
+
+            <button onclick="showProfile()">
+                👤 Profile
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ADD MONEY -->
+
+    <div class="card hidden" id="addMoneySection">
+
+        <h3>Add Money</h3>
+
+        <input type="number" id="addAmount"
+        placeholder="Enter Amount">
+
+        <button onclick="addMoney()">Add to Wallet</button>
+
+        <button class="danger"
+        onclick="hideSections()">Close</button>
+
+    </div>
+
+    <!-- SEND MONEY -->
+
+    <div class="card hidden" id="sendMoneySection">
+
+        <h3>Send Money</h3>
+
+        <input type="text" id="receiver"
+        placeholder="Receiver Name or ID">
+
+        <input type="number" id="sendAmount"
+        placeholder="Enter Amount">
+
+        <button onclick="sendMoney()">Send Money</button>
+
+        <button class="danger"
+        onclick="hideSections()">Close</button>
+
+    </div>
+
+    <!-- RECHARGE -->
+
+    <div class="card hidden" id="rechargeSection">
+
+        <h3>Mobile Recharge</h3>
+
+        <input type="tel" id="mobileNumber"
+        placeholder="Mobile Number" maxlength="10">
+
+        <input type="number" id="rechargeAmount"
+        placeholder="Recharge Amount">
+
+        <button onclick="recharge()">Recharge</button>
+
+        <button class="danger"
+        onclick="hideSections()">Close</button>
+
+    </div>
+
+    <!-- HISTORY -->
+
+    <div class="card hidden" id="historySection">
+
+        <h3>Transaction History</h3>
+
+        <div id="historyList">
+            No transactions yet.
+        </div>
+
+        <button class="danger"
+        onclick="hideSections()">Close</button>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div class="card hidden" id="profileSection">
+
+        <h3>My Profile</h3>
+
+        <p>Name: <span id="profileName"></span></p>
+        <p>Email: <span id="profileEmail"></span></p>
+
+        <br>
+
+        <button class="danger"
+        onclick="logout()">Logout</button>
+
+        <button onclick="hideSections()">Close</button>
+
+    </div>
+
+    <p id="message"></p>
+
+</div>
+
+</div>
+
+<footer>
+    <p>© 2026 Walletora</p>
+    <p>Digital Wallet Simulation Project</p>
+</footer>
+
+<script>
+
+// GET SAVED USERS
+
+let users = JSON.parse(localStorage.getItem("walletUsers")) || [];
+
+let currentUser = localStorage.getItem("walletCurrentUser");
+
+// SAVE USERS
+
+function saveUsers() {
+    localStorage.setItem("walletUsers", JSON.stringify(users));
+}
+
+// FIND CURRENT USER
+
+function getUser() {
+    return users.find(user => user.email === currentUser);
+}
+
+// REGISTER
+
+function register() {
+
+    let name = document.getElementById("regName").value.trim();
+    let email = document.getElementById("regEmail").value.trim().toLowerCase();
+    let password = document.getElementById("regPassword").value;
+
+    if (!name || !email || !password) {
+        document.getElementById("registerMessage").innerText =
+        "Please fill all fields.";
+        return;
+    }
+
+    if (users.some(user => user.email === email)) {
+        document.getElementById("registerMessage").innerText =
+        "Account already exists.";
+        return;
+    }
+
+    users.push({
+        name: name,
+        email: email,
+        password: password,
+        balance: 5000,
+        history: []
+    });
+
+    saveUsers();
+
+    alert("Registration Successful!");
+
+    showLogin();
+}
+
+// LOGIN
+
+function login() {
+
+    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    let password = document.getElementById("loginPassword").value;
+
+    let user = users.find(user =>
+        user.email === email && user.password === password
+    );
+
+    if (user) {
+
+        currentUser = email;
+
+        localStorage.setItem("walletCurrentUser", email);
+
+        openDashboard();
+
+    } else {
+
+        document.getElementById("loginMessage").innerText =
+        "Invalid Email or Password.";
+
+    }
+}
+
+// SHOW REGISTER
+
+function showRegister() {
+    document.getElementById("loginSection").classList.add("hidden");
+    document.getElementById("registerSection").classList.remove("hidden");
+}
+
+// SHOW LOGIN
+
+function showLogin() {
+    document.getElementById("registerSection").classList.add("hidden");
+    document.getElementById("loginSection").classList.remove("hidden");
+}
+
+// OPEN DASHBOARD
+
+function openDashboard() {
+
+    let user = getUser();
+
+    if (!user) return;
+
+    document.getElementById("loginSection").classList.add("hidden");
+    document.getElementById("registerSection").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+
+    document.getElementById("userName").innerText = user.name;
+
+    updateBalance();
+
+}
+
+// UPDATE BALANCE
+
+function updateBalance() {
+
+    let user = getUser();
+
+    if (!user) return;
+
+    document.getElementById("balance").innerText =
+    "₹" + user.balance.toFixed(2);
+
+}
+
+// HIDE ALL SECTIONS
+
+function hideSections() {
+
+    let sections = [
+        "addMoneySection",
+        "sendMoneySection",
+        "rechargeSection",
+        "historySection",
+        "profileSection"
+    ];
+
+    sections.forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+    });
+
+}
+
+// ADD MONEY PAGE
+
+function showAddMoney() {
+    hideSections();
+    document.getElementById("addMoneySection").classList.remove("hidden");
+}
+
+// SEND MONEY PAGE
+
+function showSendMoney() {
+    hideSections();
+    document.getElementById("sendMoneySection").classList.remove("hidden");
+}
+
+// RECHARGE PAGE
+
+function showRecharge() {
+    hideSections();
+    document.getElementById("rechargeSection").classList.remove("hidden");
+}
+
+// ADD MONEY
+
+function addMoney() {
+
+    let amount = Number(document.getElementById("addAmount").value);
+
+    let user = getUser();
+
+    if (!amount || amount <= 0 || !Number.isFinite(amount)) {
+        alert("Enter a valid amount.");
+        return;
+    }
+
+    user.balance += amount;
+
+    addTransaction("Money Added", amount);
+
+    saveUsers();
+    updateBalance();
+
+    document.getElementById("addAmount").value = "";
+
+    alert("Demo Money Added Successfully!");
+
+}
+
+// SEND MONEY
+
+function sendMoney() {
+
+    let receiver = document.getElementById("receiver").value.trim();
+
+    let amount = Number(document.getElementById("sendAmount").value);
+
+    let user = getUser();
+
+    if (!receiver || !amount || amount <= 0 || !Number.isFinite(amount)) {
+        alert("Enter valid details.");
+        return;
+    }
+
+    if (amount > user.balance) {
+        alert("Insufficient Balance!");
+        return;
+    }
+
+    user.balance -= amount;
+
+    addTransaction("Sent to " + receiver, -amount);
+
+    saveUsers();
+    updateBalance();
+
+    document.getElementById("receiver").value = "";
+    document.getElementById("sendAmount").value = "";
+
+    alert("Demo Transfer Successful!");
+
+}
+
+// MOBILE RECHARGE
+
+function recharge() {
+
+    let mobile = document.getElementById("mobileNumber").value.trim();
+
+    let amount = Number(document.getElementById("rechargeAmount").value);
+
+    let user = getUser();
+
+    if (!/^[0-9]{10}$/.test(mobile) || !amount || amount <= 0 || !Number.isFinite(amount)) {
+        alert("Enter valid mobile number and amount.");
+        return;
+    }
+
+    if (amount > user.balance) {
+        alert("Insufficient Balance!");
+        return;
+    }
+
+    user.balance -= amount;
+
+    addTransaction("Recharge: " + mobile, -amount);
+
+    saveUsers();
+    updateBalance();
+
+    document.getElementById("mobileNumber").value = "";
+    document.getElementById("rechargeAmount").value = "";
+
+    alert("Demo Recharge Successful!");
+
+}
+
+// ADD TRANSACTION
+
+function addTransaction(title, amount) {
+
+    let user = getUser();
+
+    user.history.unshift({
+        title: title,
+        amount: amount,
+        date: new Date().toLocaleString()
+    });
+
+}
+
+// SHOW HISTORY
+
+function showHistory() {
+
+    hideSections();
+
+    let user = getUser();
+
+    let list = document.getElementById("historyList");
+
+    list.innerHTML = "";
+
+    if (user.history.length === 0) {
+
+        list.innerHTML = "No transactions yet.";
+
+    } else {
+
+        user.history.forEach(item => {
+
+            let div = document.createElement("div");
+
+            div.className = "transaction";
+
+            let left = document.createElement("div");
+            let title = document.createElement("strong");
+            let date = document.createElement("small");
+
+            title.textContent = item.title;
+            date.textContent = item.date;
+
+            left.appendChild(title);
+            left.appendChild(document.createElement("br"));
+            left.appendChild(date);
+
+            let right = document.createElement("strong");
+
+            right.textContent =
+                (item.amount > 0 ? "+" : "") +
+                "₹" + item.amount.toFixed(2);
+
+            div.appendChild(left);
+            div.appendChild(right);
+
+            list.appendChild(div);
+
+        });
+
+    }
+
+    document.getElementById("historySection").classList.remove("hidden");
+
+}
+
+// PROFILE
+
+function showProfile() {
+
+    hideSections();
+
+    let user = getUser();
+
+    document.getElementById("profileName").innerText = user.name;
+
+    document.getElementById("profileEmail").innerText = user.email;
+
+    document.getElementById("profileSection").classList.remove("hidden");
+
+}
+
+// LOGOUT
+
+function logout() {
+
+    localStorage.removeItem("walletCurrentUser");
+
+    currentUser = null;
+
+    document.getElementById("dashboard").classList.add("hidden");
+
+    document.getElementById("loginSection").classList.remove("hidden");
+
+    alert("Logged Out Successfully!");
+
+}
+
+// AUTO LOGIN
+
+if (currentUser) {
+
+    if (getUser()) {
+        openDashboard();
+    } else {
+        localStorage.removeItem("walletCurrentUser");
+        currentUser = null;
+    }
+
+}
+
+</script>
+
+</body>
+</html>
